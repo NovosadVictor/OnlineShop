@@ -29,6 +29,7 @@ class LoginView(APIView):
         password = request.data['password']
         user = authenticate(username=username, password=password)
         if user is not None:
+            login(request, user)
             serializer = UserSerializer(user)
             return Response(serializer.data)
         else:
@@ -51,6 +52,7 @@ class RegistrationView(APIView):
         password = request.data['password2']
         email = request.data['email']
         user = User.objects.create(username=username, password=password, email=email)
+        login(request, user)
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
