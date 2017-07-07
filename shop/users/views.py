@@ -1,8 +1,25 @@
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
+
+
+class UserView(APIView):
+
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+
+class UsersView(APIView):
+
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
 
 
 class LoginView(APIView):
