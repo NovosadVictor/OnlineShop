@@ -18,10 +18,11 @@ class CategoriesView(APIView):
 
 class ProductsView(APIView):
 
-    def get(self, request, category=0):
-        if category == 0:
+    def get(self, request, category_slug=''):
+        if category_slug == 0:
             products = Product.objects.filter(available=True)
         else:
+            category = get_object_or_404(Category, slug=category_slug)
             products = Product.objects.filter(available=True, category=category)
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
