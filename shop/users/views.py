@@ -25,6 +25,7 @@ class UsersView(APIView):
 
 class LoginView(APIView):
 
+    @csrf_protect
     def post(self, request):
         username = request.data['username']
         print(username)
