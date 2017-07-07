@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
+from django.views.decorators.csrf import csrf_protect
 
 
 class UserView(APIView):
@@ -26,6 +27,7 @@ class LoginView(APIView):
 
     def post(self, request):
         username = request.data['username']
+        print(username)
         password = request.data['password']
         user = authenticate(username=username, password=password)
         if user is not None:
@@ -51,7 +53,7 @@ class RegistrationView(APIView):
         username = request.data['username']
         password = request.data['password2']
         email = request.data['email']
-        user = User.objects.create(username=username, password=password, email=email)
+        user = User.objects.create_user(username=username, password=password, email=email)
         login(request, user)
         serializer = UserSerializer(user)
         return Response(serializer.data)
